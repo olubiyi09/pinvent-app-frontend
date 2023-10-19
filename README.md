@@ -1,1 +1,1 @@
-Link to the project live: https://dashboard.render.com/
+Link to the project live: https://my-pinvent-app.onrender.com/
