@@ -17,19 +17,22 @@ const initialState = {
 
 // Create New Product 
 export const createProduct = createAsyncThunk(
-    "products/create",
-    async (formData, thunkAPI) => {
-        try {
-            return await productService.createProduct(formData)
-        } catch (error) {
-            const message = (
-                error.response && error.response.data && error.response.data.message
-            ) || error.message || error.toString();
-            console.log(message);
-            return thunkAPI.rejectWithValue(message)
-        }
+  "products/create",
+  async (formData, thunkAPI) => {
+    try {
+      return await productService.createProduct(formData);
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      console.log(message);
+      return thunkAPI.rejectWithValue(message);
     }
-)
+  }
+);
 
 // Get all Product 
 export const getProduct = createAsyncThunk(
