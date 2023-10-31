@@ -1,42 +1,50 @@
-import React, { useEffect } from 'react'
-import "./ProductDetail.scss"
-import useRedirectLoggedOutUser from '../../../customHook/useRedirectLoggedOutUser'
-import { useDispatch, useSelector } from 'react-redux'
-import { useParams } from 'react-router-dom'
-import { selectIsLoggedIn } from '../../../redux/features/auth/authSlice'
-import { getAProduct } from '../../../redux/features/product/productSlice'
-import Card from '../../card/Card'
-import { SpinnerImg } from '../../loader/Loader'
-import DOMpurify from "dompurify"
+import React, { useEffect, useState } from 'react';
+import "./ProductDetail.scss";
+import useRedirectLoggedOutUser from '../../../customHook/useRedirectLoggedOutUser';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { selectIsLoggedIn } from '../../../redux/features/auth/authSlice';
+import { getAProduct } from '../../../redux/features/product/productSlice';
+import Card from '../../card/Card';
+import { SpinnerImg } from '../../loader/Loader';
+import DOMPurify from "dompurify";
 
 const ProductDetail = () => {
-    useRedirectLoggedOutUser("/login")
-    const dispatch = useDispatch()
+    useRedirectLoggedOutUser("/login");
+    const dispatch = useDispatch();
 
-    const { id } = useParams()
-
-    const isLoggedIn = useSelector(selectIsLoggedIn)
-    const { product, isLoading, isError, message } = useSelector((state) => state.product)
-
-    const stockStatus = (quantity) => {
-        if (quantity > 0) {
-            return <span className='--color-success'>In Stock</span>
-        }
-        return <span className='--color-danger'>Out Stock</span>
-    }
-
+    const { id } = useParams();
+    const isLoggedIn = useSelector(selectIsLoggedIn);
+    const [sanitizedDescription, setSanitizedDescription] = useState('');
 
     useEffect(() => {
         if (isLoggedIn === true) {
-            dispatch(getAProduct(id))
-            console.log(product);
+            dispatch(getAProduct(id));
         }
+    }, [isLoggedIn, dispatch, id]);
 
+    const stockStatus = (quantity) => {
+        if (quantity > 0) {
+            return <span className='--color-success'>In Stock</span>;
+        }
+        return <span className='--color-danger'>Out Stock</span>;
+    };
+
+    useEffect(() => {
         if (isError) {
             console.log(message);
         }
-    }, [isLoggedIn, isError, message, dispatch, product, id])
+    }, [isError, message]);
 
+    useEffect(() => {
+        if (product) {
+            // Sanitize the product description before setting it in the state
+            const sanitizedDescription = DOMPurify.sanitize(product.description);
+            setSanitizedDescription(sanitizedDescription);
+        }
+    }, [product]);
+
+    const { product, isLoading, isError, message } = useSelector((state) => state.product);
 
     return (
         <div className="product-detail">
@@ -46,7 +54,7 @@ const ProductDetail = () => {
                 {product && (
                     <div className='detail'>
                         <Card cardClass="group">
-                            {product?.image ? (
+                            {product.image ? (
                                 <img src={product.image.filePath} alt={product.image.fileName} />
                             ) : (
                                 <p>No image set for this product</p>
@@ -79,7 +87,7 @@ const ProductDetail = () => {
                         </p>
                         <hr />
                         <div dangerouslySetInnerHTML={{
-                            __html: DOMpurify.sanitize(product.description)
+                            __html: sanitizedDescription
                         }}>
                         </div>
                         <hr />
@@ -90,7 +98,7 @@ const ProductDetail = () => {
                 )}
             </Card>
         </div>
-    )
-}
+    );
+};
 
-export default ProductDetail
+export default ProductDetail;
