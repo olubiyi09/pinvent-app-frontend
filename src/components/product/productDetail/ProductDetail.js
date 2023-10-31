@@ -6,8 +6,7 @@ import { useParams } from 'react-router-dom'
 import { selectIsLoggedIn } from '../../../redux/features/auth/authSlice'
 import { getAProduct } from '../../../redux/features/product/productSlice'
 import Card from '../../card/Card'
-// import { SpinnerImg } from '../../loader/Loader'
-import Loader from '../../loader/Loaderr';
+import { SpinnerImg } from '../../loader/Loader'
 import DOMpurify from "dompurify"
 
 const ProductDetail = () => {
@@ -43,8 +42,7 @@ const ProductDetail = () => {
         <div className="product-detail">
             <h3>Product Details</h3>
             <Card cardClass="card">
-                // {isLoading && <SpinnerImg />}
-                {isLoading && <Loader />}
+                {isLoading && <SpinnerImg />}
                 {product && (
                     <div className='detail'>
                         <Card cardClass="group">
