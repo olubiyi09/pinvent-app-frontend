@@ -7,7 +7,7 @@ import { selectIsLoggedIn } from '../../../redux/features/auth/authSlice'
 import { getAProduct } from '../../../redux/features/product/productSlice'
 import Card from '../../card/Card'
 // import { SpinnerImg } from '../../loader/Loader'
-import Loader from '../../components/loader/Loader';
+import Loader from '../../loader/Loaderr';
 import DOMpurify from "dompurify"
 
 const ProductDetail = () => {
